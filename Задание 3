@@ -1,0 +1,74 @@
+#include <stdio.h>
+#include <math.h>
+#include<locale.h>
+#define N 100
+
+// функции
+double* full_elements(double* ptr_array, int n);
+int put_elements(double* ptr_array, int n);
+double find_max_abs_except_A(double* ptr_array, int n, double A);
+    
+int main() {
+    setlocale(LC_ALL, "RUS");
+    double array[N];
+    int size;
+    double A;
+
+    printf("Введите размер массива > ");
+    scanf("%d", &size);
+
+    full_elements(array, size);
+
+    printf("Исходный массив:\n");
+    put_elements(array, size);
+
+    printf("Введите значение A (исключаемый элемент) > ");
+    scanf("%lf", &A);
+
+    double result = find_max_abs_except_A(array, size, A);
+
+    if (result != -1) {
+        printf("Максимальное по модулю значение (не равное %.2f): %.2f\n", A, result);
+    }
+    else {
+        printf("Не найдено элементов, отличных от %.2f\n", A);
+    }
+
+    return 0;
+}
+
+// Заполнение 
+double* full_elements(double* ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        ptr_array[i] = (i % 3 == 0) ? -i - 1 : i + 1;  
+    }
+    return ptr_array;
+}
+
+// Печать 
+int put_elements(double* ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%6.1f", ptr_array[i]);
+        if ((i + 1) % 10 == 0) printf("\n");
+    }
+    printf("\n");
+    return n;
+}
+// нахождение максимального модуля
+double find_max_abs_except_A(double* ptr_array, int n, double A) {
+    double max_abs = -1;  
+    int found = 0;       
+    for (int i = 0; i < n; i++) { 
+        if (ptr_array[i] == A) {
+            continue;
+        }
+        if (!found || fabs(ptr_array[i]) > fabs(max_abs)) {
+            max_abs = ptr_array[i];
+            found = 1;
+        }
+    }
+    if (!found) {
+        return 0;
+    }
+    return max_abs;
+}
